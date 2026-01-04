@@ -1,0 +1,138 @@
+# Yazi Keymap Configuration
+
+[manager]
+keymap = [
+    # Navigation
+    { on = [ "k" ], run = "arrow -1", desc = "Move cursor up" },
+    { on = [ "j" ], run = "arrow 1", desc = "Move cursor down" },
+    { on = [ "K" ], run = "arrow -5", desc = "Move cursor up 5 lines" },
+    { on = [ "J" ], run = "arrow 5", desc = "Move cursor down 5 lines" },
+    { on = [ "h" ], run = "leave", desc = "Go to parent directory" },
+    { on = [ "l" ], run = "enter", desc = "Enter directory / Open file" },
+
+    { on = [ "g", "g" ], run = "arrow -99999999", desc = "Go to top" },
+    { on = [ "G" ], run = "arrow 99999999", desc = "Go to bottom" },
+
+    # Home and common dirs
+    { on = [ "g", "h" ], run = "cd ~", desc = "Go to home" },
+    { on = [ "g", "c" ], run = "cd ~/.config", desc = "Go to config" },
+    { on = [ "g", "d" ], run = "cd ~/Downloads", desc = "Go to downloads" },
+    { on = [ "g", "/" ], run = "cd /", desc = "Go to root" },
+
+    # Selection
+    { on = [ "<Space>" ], run = [ "select --state=none", "arrow 1" ], desc = "Toggle select" },
+    { on = [ "v" ], run = "visual_mode", desc = "Visual mode" },
+    { on = [ "V" ], run = "visual_mode --unset", desc = "Exit visual mode" },
+    { on = [ "<C-a>" ], run = "select_all --state=true", desc = "Select all" },
+    { on = [ "<C-r>" ], run = "select_all --state=none", desc = "Invert selection" },
+
+    # Operations
+    { on = [ "o" ], run = "open", desc = "Open file" },
+    { on = [ "O" ], run = "open --interactive", desc = "Open interactively" },
+    { on = [ "<Enter>" ], run = "open", desc = "Open file" },
+    { on = [ "e" ], run = "open", desc = "Open file" },
+    { on = [ "E" ], run = "open --interactive", desc = "Open interactively" },
+
+    # Yank/Paste/Delete
+    { on = [ "y", "y" ], run = "yank", desc = "Yank (copy)" },
+    { on = [ "y", "p" ], run = "copy path", desc = "Copy path" },
+    { on = [ "y", "d" ], run = "copy dirname", desc = "Copy directory path" },
+    { on = [ "y", "f" ], run = "copy filename", desc = "Copy filename" },
+    { on = [ "y", "n" ], run = "copy name_without_ext", desc = "Copy name without ext" },
+    { on = [ "d", "d" ], run = "yank --cut", desc = "Cut" },
+    { on = [ "p" ], run = "paste", desc = "Paste" },
+    { on = [ "P" ], run = "paste --force", desc = "Paste (overwrite)" },
+    { on = [ "D" ], run = "remove", desc = "Delete" },
+    { on = [ "x" ], run = "remove --permanently", desc = "Delete permanently" },
+
+    # Create/Rename
+    { on = [ "a" ], run = "create", desc = "Create file/directory" },
+    { on = [ "r" ], run = "rename --cursor=before_ext", desc = "Rename" },
+    { on = [ "R" ], run = "rename --empty=all", desc = "Rename (clear)" },
+
+    # Search
+    { on = [ "/" ], run = "search fd", desc = "Search files" },
+    { on = [ "?" ], run = "search rg", desc = "Search content" },
+    { on = [ "n" ], run = "search_next", desc = "Next search result" },
+    { on = [ "N" ], run = "search_prev", desc = "Previous search result" },
+    { on = [ "<Esc>" ], run = "escape", desc = "Cancel/Escape" },
+
+    # Filter
+    { on = [ "f" ], run = "filter --smart", desc = "Filter" },
+
+    # Sort
+    { on = [ "s", "m" ], run = "sort modified --reverse=no", desc = "Sort by modified" },
+    { on = [ "s", "M" ], run = "sort modified --reverse", desc = "Sort by modified (desc)" },
+    { on = [ "s", "n" ], run = "sort natural --reverse=no", desc = "Sort by name" },
+    { on = [ "s", "N" ], run = "sort natural --reverse", desc = "Sort by name (desc)" },
+    { on = [ "s", "s" ], run = "sort size --reverse=no", desc = "Sort by size" },
+    { on = [ "s", "S" ], run = "sort size --reverse", desc = "Sort by size (desc)" },
+
+    # Tabs
+    { on = [ "t" ], run = "tab_create --current", desc = "New tab" },
+    { on = [ "1" ], run = "tab_switch 0", desc = "Tab 1" },
+    { on = [ "2" ], run = "tab_switch 1", desc = "Tab 2" },
+    { on = [ "3" ], run = "tab_switch 2", desc = "Tab 3" },
+    { on = [ "4" ], run = "tab_switch 3", desc = "Tab 4" },
+    { on = [ "[" ], run = "tab_switch -1 --relative", desc = "Previous tab" },
+    { on = [ "]" ], run = "tab_switch 1 --relative", desc = "Next tab" },
+    { on = [ "{" ], run = "tab_swap -1", desc = "Swap with previous tab" },
+    { on = [ "}" ], run = "tab_swap 1", desc = "Swap with next tab" },
+
+    # View
+    { on = [ "." ], run = "hidden toggle", desc = "Toggle hidden files" },
+    { on = [ "z", "h" ], run = "hidden toggle", desc = "Toggle hidden files" },
+    { on = [ "w" ], run = "tasks_show", desc = "Show tasks" },
+
+    # Help
+    { on = [ "~" ], run = "help", desc = "Show help" },
+
+    # Quit
+    { on = [ "q" ], run = "quit", desc = "Quit" },
+    { on = [ "<C-q>" ], run = "quit --no-cwd-file", desc = "Quit without cd" },
+]
+
+[tasks]
+keymap = [
+    { on = [ "<Esc>" ], run = "close", desc = "Close" },
+    { on = [ "q" ], run = "close", desc = "Close" },
+    { on = [ "k" ], run = "arrow -1", desc = "Move up" },
+    { on = [ "j" ], run = "arrow 1", desc = "Move down" },
+    { on = [ "x" ], run = "cancel", desc = "Cancel task" },
+]
+
+[select]
+keymap = [
+    { on = [ "<Esc>" ], run = "close", desc = "Close" },
+    { on = [ "q" ], run = "close", desc = "Close" },
+    { on = [ "<Enter>" ], run = "close --submit", desc = "Submit" },
+    { on = [ "k" ], run = "arrow -1", desc = "Move up" },
+    { on = [ "j" ], run = "arrow 1", desc = "Move down" },
+]
+
+[input]
+keymap = [
+    { on = [ "<Esc>" ], run = "close", desc = "Close" },
+    { on = [ "<Enter>" ], run = "close --submit", desc = "Submit" },
+
+    # Cursor movement
+    { on = [ "<Left>" ], run = "move -1", desc = "Move left" },
+    { on = [ "<Right>" ], run = "move 1", desc = "Move right" },
+    { on = [ "<C-a>" ], run = "move -999", desc = "Start of line" },
+    { on = [ "<C-e>" ], run = "move 999", desc = "End of line" },
+
+    # Delete
+    { on = [ "<Backspace>" ], run = "backspace", desc = "Backspace" },
+    { on = [ "<Delete>" ], run = "delete", desc = "Delete" },
+    { on = [ "<C-u>" ], run = "kill bol", desc = "Kill to start" },
+    { on = [ "<C-k>" ], run = "kill eol", desc = "Kill to end" },
+    { on = [ "<C-w>" ], run = "kill backward", desc = "Kill word backward" },
+]
+
+[help]
+keymap = [
+    { on = [ "<Esc>" ], run = "escape", desc = "Close" },
+    { on = [ "q" ], run = "close", desc = "Close" },
+    { on = [ "k" ], run = "arrow -1", desc = "Move up" },
+    { on = [ "j" ], run = "arrow 1", desc = "Move down" },
+]

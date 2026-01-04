@@ -1,0 +1,59 @@
+// Zellij Configuration
+
+keybinds clear-defaults=false {
+    shared_except "locked" {
+        // Vim-style pane navigation with Alt
+        bind "Alt h" { MoveFocus "Left"; }
+        bind "Alt l" { MoveFocus "Right"; }
+        bind "Alt j" { MoveFocus "Down"; }
+        bind "Alt k" { MoveFocus "Up"; }
+
+        // Quick pane split
+        bind "Alt -" { NewPane "Down"; }
+        bind "Alt \\" { NewPane "Right"; }
+
+        // Quick tab navigation
+        bind "Alt 1" { GoToTab 1; }
+        bind "Alt 2" { GoToTab 2; }
+        bind "Alt 3" { GoToTab 3; }
+        bind "Alt 4" { GoToTab 4; }
+        bind "Alt 5" { GoToTab 5; }
+    }
+}
+
+// Use compact layout by default
+default_layout "compact"
+
+// Theme - catppuccin looks great
+theme "catppuccin-mocha"
+
+// Copy to clipboard on select
+copy_on_select true
+
+// Simplified UI (less visual noise)
+simplified_ui true
+
+// Hide pane frames for cleaner look
+pane_frames false
+
+// Mouse support
+mouse_mode true
+
+// Scrollback buffer
+scroll_buffer_size 50000
+
+// Session serialization (allows session restore)
+session_serialization true
+
+// Auto-attach to existing session if available
+// auto_attach true
+
+// Default shell
+default_shell "zsh"
+
+// UI tweaks
+ui {
+    pane_frames {
+        hide_session_name true
+    }
+}
