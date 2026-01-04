@@ -3,9 +3,9 @@ set -e
 
 echo "=== Ubuntu Server DevOps CLI Setup ==="
 
-# Update system
-echo "[1/12] Updating system..."
-sudo apt update && sudo apt upgrade -y
+# Update package lists (no upgrade)
+echo "[1/12] Updating package lists..."
+sudo apt update
 
 # Install base packages (neovim installed separately for newer version)
 echo "[2/12] Installing base packages..."
@@ -19,8 +19,23 @@ sudo apt install -y \
 # Install Neovim (latest stable from GitHub)
 echo "[3/12] Installing Neovim..."
 if ! command -v nvim &> /dev/null || [[ $(nvim --version | head -1 | grep -oP '\d+\.\d+') < "0.9" ]]; then
-  curl -LO https://github.com/neovim/neovim/releases/latest/download/nvim-linux64.tar.gz
-  sudo rm -rf /opt/nvim
+  # Get latest version tag
+  NVIM_VERSION=$(curl -s "https://api.github.com/repos/neovim/neovim/releases/latest" | grep -Po '"tag_name": "\K[^"]*')
+  echo "Downloading Neovim ${NVIM_VERSION}..."
+
+  # Download with explicit URL and verify
+  curl -fSL -o nvim-linux64.tar.gz "https://github.com/neovim/neovim/releases/download/${NVIM_VERSION}/nvim-linux64.tar.gz"
+
+  # Verify download (should be > 10MB)
+  FILESIZE=$(stat -c%s "nvim-linux64.tar.gz" 2>/dev/null || stat -f%z "nvim-linux64.tar.gz" 2>/dev/null)
+  if [ "$FILESIZE" -lt 1000000 ]; then
+    echo "ERROR: Download failed (file too small: ${FILESIZE} bytes)"
+    cat nvim-linux64.tar.gz  # Show error message
+    rm -f nvim-linux64.tar.gz
+    exit 1
+  fi
+
+  sudo rm -rf /opt/nvim-linux64
   sudo tar -C /opt -xzf nvim-linux64.tar.gz
   sudo ln -sf /opt/nvim-linux64/bin/nvim /usr/local/bin/nvim
   rm nvim-linux64.tar.gz
@@ -81,8 +96,9 @@ fi
 # Install yazi (TUI file explorer)
 echo "[9/12] Installing yazi..."
 if ! command -v yazi &> /dev/null; then
-  curl -Lo yazi.zip "https://github.com/sxyazi/yazi/releases/latest/download/yazi-x86_64-unknown-linux-gnu.zip"
-  unzip yazi.zip
+  YAZI_VERSION=$(curl -s "https://api.github.com/repos/sxyazi/yazi/releases/latest" | grep -Po '"tag_name": "v\K[^"]*')
+  curl -fSL -o yazi.zip "https://github.com/sxyazi/yazi/releases/download/v${YAZI_VERSION}/yazi-x86_64-unknown-linux-gnu.zip"
+  unzip -q yazi.zip
   sudo install yazi-x86_64-unknown-linux-gnu/yazi /usr/local/bin/
   rm -rf yazi.zip yazi-x86_64-unknown-linux-gnu
 else
@@ -93,10 +109,10 @@ fi
 echo "[10/12] Installing lazygit..."
 if ! command -v lazygit &> /dev/null; then
   LAZYGIT_VERSION=$(curl -s "https://api.github.com/repos/jesseduffield/lazygit/releases/latest" | grep -Po '"tag_name": "v\K[^"]*')
-  curl -Lo lazygit.tar.gz "https://github.com/jesseduffield/lazygit/releases/latest/download/lazygit_${LAZYGIT_VERSION}_Linux_x86_64.tar.gz"
+  curl -fSL -o lazygit.tar.gz "https://github.com/jesseduffield/lazygit/releases/download/v${LAZYGIT_VERSION}/lazygit_${LAZYGIT_VERSION}_Linux_x86_64.tar.gz"
   tar xf lazygit.tar.gz lazygit
   sudo install lazygit /usr/local/bin
-  rm lazygit lazygit.tar.gz
+  rm -f lazygit lazygit.tar.gz
 else
   echo "lazygit already installed, skipping..."
 fi
