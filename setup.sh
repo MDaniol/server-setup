@@ -23,22 +23,13 @@ if ! command -v nvim &> /dev/null || [[ $(nvim --version | head -1 | grep -oP '\
   NVIM_VERSION=$(curl -s "https://api.github.com/repos/neovim/neovim/releases/latest" | grep -Po '"tag_name": "\K[^"]*')
   echo "Downloading Neovim ${NVIM_VERSION}..."
 
-  # Download with explicit URL and verify
-  curl -fSL -o nvim-linux64.tar.gz "https://github.com/neovim/neovim/releases/download/${NVIM_VERSION}/nvim-linux64.tar.gz"
+  # Download (asset name changed to nvim-linux-x86_64.tar.gz in newer releases)
+  curl -fSL -o nvim.tar.gz "https://github.com/neovim/neovim/releases/download/${NVIM_VERSION}/nvim-linux-x86_64.tar.gz"
 
-  # Verify download (should be > 10MB)
-  FILESIZE=$(stat -c%s "nvim-linux64.tar.gz" 2>/dev/null || stat -f%z "nvim-linux64.tar.gz" 2>/dev/null)
-  if [ "$FILESIZE" -lt 1000000 ]; then
-    echo "ERROR: Download failed (file too small: ${FILESIZE} bytes)"
-    cat nvim-linux64.tar.gz  # Show error message
-    rm -f nvim-linux64.tar.gz
-    exit 1
-  fi
-
-  sudo rm -rf /opt/nvim-linux64
-  sudo tar -C /opt -xzf nvim-linux64.tar.gz
-  sudo ln -sf /opt/nvim-linux64/bin/nvim /usr/local/bin/nvim
-  rm nvim-linux64.tar.gz
+  sudo rm -rf /opt/nvim-linux-x86_64
+  sudo tar -C /opt -xzf nvim.tar.gz
+  sudo ln -sf /opt/nvim-linux-x86_64/bin/nvim /usr/local/bin/nvim
+  rm nvim.tar.gz
   echo "Neovim $(nvim --version | head -1) installed"
 else
   echo "Neovim already up to date, skipping..."
